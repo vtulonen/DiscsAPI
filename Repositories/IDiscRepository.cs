@@ -8,8 +8,9 @@ namespace DiscsAPI.Repositories
     {
         Task<IEnumerable<Disc>> Get();
         Task<Disc> Get(int id);
-        Task<Disc> GetDisc(string name);
+        Task<Disc> Get(string name);
         Task<Disc> Create(Disc disc);
+        Task<Disc[]> Create(Disc[] discs);
         Task Update(Disc disc);
         Task Delete(int id);
     }

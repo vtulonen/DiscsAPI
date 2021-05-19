@@ -17,36 +17,43 @@ namespace DiscsAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Disc>> GetDiscs()
+        public async Task<IEnumerable<Disc>> GetAll()
         {
             return await _discRepository.Get();
         }
    
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Disc>> GetDiscs(int id)
+        public async Task<ActionResult<Disc>> Get(int id)
         {
             return await _discRepository.Get(id);
         }
 
         [Route("get/{name}")]
         [HttpGet]
-        public async Task<ActionResult<Disc>> GetDisc(string name)
+        public async Task<ActionResult<Disc>> Get(string name)
         {
-            return await _discRepository.GetDisc(name);
+            return await _discRepository.Get(name);
         }
 
-
-
-
+        // Post an array of disc objects
+        [Route("array")]
         [HttpPost]
-        public async Task<ActionResult<Disc>>PostDiscs([FromBody] Disc disc) // Model binding converts json in request payload to (disc) object
+        public async Task<ActionResult<Disc>> Post([FromBody] Disc[] discs) 
+        {
+            var newDiscs = await _discRepository.Create(discs);
+            return Created("Created discs:", newDiscs);
+        }
+
+        // Post single disc
+        [HttpPost]
+        public async Task<ActionResult<Disc>>Post([FromBody] Disc disc) // [From Body] Model binding converts json in request payload to (disc) object
         {
             var newDisc = await _discRepository.Create(disc);
-            return CreatedAtAction(nameof(GetDiscs), new { id = newDisc.Id }, newDisc);
+            return CreatedAtAction(nameof(Get), new { id = newDisc.Id }, newDisc);
         }
 
         [HttpPut]
-        public async Task<ActionResult> PutDiscs(int id, [FromBody] Disc disc)
+        public async Task<ActionResult> PutDisc(int id, [FromBody] Disc disc)
         {
             if (id != disc.Id) return BadRequest();
 

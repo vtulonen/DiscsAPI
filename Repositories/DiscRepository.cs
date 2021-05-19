@@ -13,16 +13,27 @@ namespace DiscsAPI.Repositories
     {
         private readonly DiscContext _context; 
 
-        public DiscRepository(DiscContext context) // Context dependency injected trough the constructor
+        public DiscRepository(DiscContext context) // Context injected trough the constructor
         {
             _context = context;
         }
+        // Create one
         public async Task<Disc> Create(Disc disc)
         {
             _context.Discs.Add(disc);
             await _context.SaveChangesAsync();
             return disc;
         }
+
+
+        // Create many
+        public async Task<Disc[]> Create(Disc[] discs)
+        {
+            _context.Discs.AddRange(discs);
+            await _context.SaveChangesAsync();
+            return discs;
+        }
+
 
         public async Task Delete(int id)
         {
@@ -41,7 +52,7 @@ namespace DiscsAPI.Repositories
             return await _context.Discs.FindAsync(id);
         }
 
-        public async Task<Disc> GetDisc(string name)
+        public async Task<Disc> Get(string name)
         {
             return await _context.Discs.FirstOrDefaultAsync(d => d.Name == name);
         }
